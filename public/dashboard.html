@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Invenzo Dashboard</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <div class="dashboard-container">
+    <h2>Welcome to Invenzo 👋</h2>
+    <button id="logoutBtn">Logout</button>
+
+    <h3>Your Assets</h3>
+    <table id="assetTable">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Asset Name</th>
+          <th>Category</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody id="assetBody">
+        <!-- Rows will be inserted here -->
+      </tbody>
+    </table>
+  </div>
+
+  <script src="js/dashboard.js"></script>
+</body>
+</html>
