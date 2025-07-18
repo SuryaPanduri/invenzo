@@ -1,27 +1,79 @@
-# INVENZO
+# INVENZO – Asset Management System 🧾💼
 
-Asset management system inspired by AssetTiger.
+INVENZO is a lightweight web-based asset management system built using **HTML**, **CSS**, **JavaScript**, **Node.js**, and **MySQL**. Inspired by AssetTiger, it helps organizations keep track of their assets, check-ins/check-outs, and asset history.
 
-## Features
-- User Signup/Login
-- Add/Edit/Delete Assets
-- Checkout and Return Assets
-- Dashboard Overview
-- Auth-protected routes (JWT)
-- MySQL backend with Node.js
+---
 
-## Tech Stack
-- Frontend: HTML, CSS, JavaScript (Vanilla)
-- Backend: Node.js + Express
-- Database: MySQL
+## 🚀 Features
 
-## Setup
+- 🔐 Secure Signup/Login with JWT Authentication
+- 🧾 Add, edit, delete assets
+- 📦 Check-in / Check-out system (coming soon)
+- 📊 Dashboard for managing and viewing asset inventory
+- 👤 Role-based access (coming soon)
 
-```bash
-git clone https://github.com/yourusername/invenzo.git
+---
+
+## 🛠️ Tech Stack
+
+| Layer         | Technology       |
+|---------------|------------------|
+| Frontend      | HTML, CSS, JavaScript |
+| Backend       | Node.js, Express.js |
+| Database      | MySQL |
+| Auth          | JWT (JSON Web Tokens) |
+| Environment   | dotenv |
+
+---
+
+✅ Setup Instructions
+
+**1.Clone the repo**
+
+git clone https://github.com/SuryaPanduri/invenzo.git
 cd invenzo
-npm install
-cp server/.env.example server/.env
-# Edit your DB credentials in .env
-npm start
 
+**2.Install dependencies**
+
+npm install
+
+**3.Create .env file**
+
+DB_HOST=localhost
+
+DB_USER=root
+
+DB_PASS=your_password
+
+DB_NAME=invenzo_db
+
+JWT_SECRET=your_super_secret_key
+
+**4.Run MySQL schema**
+
+Import sql/schema.sql into your MySQL to create tables.
+
+**5.Start the server**
+
+node server/app.js
+
+**6.Access the app**
+
+Open public/login.html in your browser
+
+**📬 API Endpoints**
+
+POST   /api/users/signup       - Create a user
+POST   /api/users/login        - Login + JWT token
+GET    /api/assets             - Get all assets (Auth)
+
+**🔒 Security**
+
+•Passwords are hashed using bcrypt
+•Routes are protected with JWT-based middleware
+•.env is excluded using .gitignore
+
+**🙋‍♂️ Author**
+
+Made with ❤️ by Surya Panduri
+Building INVENZO to simplify asset tracking and learning full-stack magic! ✨
