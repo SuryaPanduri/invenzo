@@ -26,61 +26,63 @@ INVENZO is a lightweight web-based asset management system built using **HTML**,
 
 ---
 
-✅ Setup Instructions
+**✅ Setup Instructions**
 
 **1.Clone the repo**
 
-git clone https://github.com/SuryaPanduri/invenzo.git
-cd invenzo
+    git clone https://github.com/SuryaPanduri/invenzo.git
+
+    cd invenzo
 
 
 **2.Install dependencies**
 
-npm install
+
+    npm install
 
 
 **3.Create .env file**
 
-DB_HOST=localhost
+    DB_HOST=localhost
 
-DB_USER=root
+    DB_USER=root
 
-DB_PASS=your_password
+    DB_PASS=your_password
 
-DB_NAME=invenzo_db
+    DB_NAME=invenzo_db
 
-JWT_SECRET=your_super_secret_key
+    JWT_SECRET=your_super_secret_key
 
 
 **4.Run MySQL schema**
 
-Import sql/schema.sql into your MySQL to create tables.
+    Import sql/schema.sql into your MySQL to create tables.
 
 
 **5.Start the server**
 
-node server/app.js
+    node server/app.js
 
 
 **6.Access the app**
 
-Open public/login.html in your browser
+    Open public/login.html in your browser
 
 
 **📬 API Endpoints**
 
-POST   /api/users/signup       - Create a user
-POST   /api/users/login        - Login + JWT token
-GET    /api/assets             - Get all assets (Auth)
+    POST   /api/users/signup       - Create a user
+    POST   /api/users/login        - Login + JWT token
+    GET    /api/assets             - Get all assets (Auth)
 
 
 **🔒 Security**
 
-•Passwords are hashed using bcrypt
-•Routes are protected with JWT-based middleware
-•.env is excluded using .gitignore
+    •Passwords are hashed using bcrypt
+    •Routes are protected with JWT-based middleware
+    •.env is excluded using .gitignore
 
 **🙋‍♂️ Author**
 
-Made with ❤️ by Surya Panduri
-Building INVENZO to simplify asset tracking and learning full-stack magic! ✨
+    Made with ❤️ by Surya Panduri
+    Building INVENZO to simplify asset tracking and learning full-stack magic! ✨
