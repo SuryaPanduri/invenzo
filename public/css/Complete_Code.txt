@@ -1,0 +1,823 @@
+INVENZO/README.md ---
+
+# INVENZO – Asset Management System 🧾💼
+
+INVENZO is a lightweight web-based asset management system built using **HTML**, **CSS**, **JavaScript**, **Node.js**, and **MySQL**. Inspired by AssetTiger, it helps organizations keep track of their assets, check-ins/check-outs, and asset history.
+
+---
+
+## 🚀 Features
+
+- 🔐 Secure Signup/Login with JWT Authentication
+- 🧾 Add, edit, delete assets
+- 📦 Check-in / Check-out system (coming soon)
+- 📊 Dashboard for managing and viewing asset inventory
+- 👤 Role-based access (coming soon)
+
+---
+
+## 🛠️ Tech Stack
+
+| Layer         | Technology       |
+|---------------|------------------|
+| Frontend      | HTML, CSS, JavaScript |
+| Backend       | Node.js, Express.js |
+| Database      | MySQL |
+| Auth          | JWT (JSON Web Tokens) |
+| Environment   | dotenv |
+
+---
+
+✅ Setup Instructions
+
+**1.Clone the repo**
+
+git clone https://github.com/SuryaPanduri/invenzo.git
+cd invenzo
+
+**2.Install dependencies**
+
+npm install
+
+**3.Create .env file**
+
+DB_HOST=localhost
+
+DB_USER=root
+
+DB_PASS=your_password
+
+DB_NAME=invenzo_db
+
+JWT_SECRET=your_super_secret_key
+
+**4.Run MySQL schema**
+
+Import sql/schema.sql into your MySQL to create tables.
+
+**5.Start the server**
+
+node server/app.js
+
+**6.Access the app**
+
+Open public/login.html in your browser
+
+**📬 API Endpoints**
+
+POST   /api/users/signup       - Create a user
+POST   /api/users/login        - Login + JWT token
+GET    /api/assets             - Get all assets (Auth)
+
+**🔒 Security**
+
+•Passwords are hashed using bcrypt
+•Routes are protected with JWT-based middleware
+•.env is excluded using .gitignore
+
+**🙋‍♂️ Author**
+
+Made with ❤️ by Surya Panduri
+Building INVENZO to simplify asset tracking and learning full-stack magic! ✨
+
+
+INVENZO/public/login.html ----
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Invenzo Login</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <div class="login-container">
+    <h2>Login to INVENZO</h2>
+    <form id="loginForm">
+      <input type="email" id="email" placeholder="Email" required />
+      <input type="password" id="password" placeholder="Password" required />
+      <button type="submit">Login</button>
+    </form>
+    <p id="error" style="color: red;"></p>
+    <p>Don't have an account? <a href="signup.html">Sign up here</a></p>
+  </div>
+
+  <script src="js/login.js"></script>
+</body>
+</html>
+
+INVENZO/public/signup.html---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Invenzo Signup</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <div class="login-container">
+    <h2>Create an Account</h2>
+    <form id="signupForm">
+      <input type="text" id="name" placeholder="Name" required />
+      <input type="email" id="email" placeholder="Email" required />
+      <input type="password" id="password" placeholder="Password" required />
+      <button type="submit">Sign Up</button>
+    </form>
+    <p id="signupError" style="color: red;"></p>
+    <p>Already have an account? <a href="login.html">Login here</a></p>
+  </div>
+
+  <script src="js/signup.js"></script>
+</body>
+</html>
+
+INVENZO/public/dashboard.html ---
+
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>INVENZO Dashboard</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+  <link href="css/dashboard.css" rel="stylesheet" />
+</head>
+<body>
+<div class="d-flex">
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <div>
+      <h4>INVENZO</h4>
+      <div class="nav-links">
+        <a href="#" class="active"><i class="fas fa-chart-line"></i> Dashboard</a>
+        <a href="#" onclick="showAssets()"><i class="fas fa-boxes"></i> Assets</a>
+        <a href="#"><i class="fas fa-users"></i> Users</a>
+        <a href="#"><i class="fas fa-cog"></i> Settings</a>
+      </div>
+    </div>
+    <div>
+      <a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="flex-grow-1 p-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h2>Dashboard</h2>
+      <div class="d-flex align-items-center gap-3">
+        <div class="dropdown">
+            <button class="btn btn-outline-dark dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                <span id="usernameDisplay">User</span>
+              </button>
+          <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+            <li><a class="dropdown-item" href="#">Logout</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="row g-3 mb-4">
+      <div class="col-md-4">
+        <div class="p-3 stats-card text-center text-white" style="background: linear-gradient(135deg, #6366f1, #8b5cf6); border-radius: 12px;">
+          <h5>Total Assets</h5>
+          <h2 id="totalAssets">124</h2>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="p-3 stats-card text-center text-white" style="background: linear-gradient(135deg, #10b981, #34d399); border-radius: 12px;">
+          <h5>Available</h5>
+          <h2 id="availableAssets">80</h2>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="p-3 stats-card text-center text-white" style="background: linear-gradient(135deg, #f97316, #f59e0b); border-radius: 12px;">
+          <h5>Checked Out</h5>
+          <h2 id="checkedOutAssets">36</h2>
+        </div>
+      </div>
+    </div>
+
+    <!-- Table - hidden by default -->
+    <div id="assetTableSection" class="table-responsive d-none" style="max-height: 400px; overflow-y: auto;">
+        <table class="table table-bordered table-hover bg-white">
+            <thead class="table-dark">
+                <tr>
+                <th>ID</th>
+                <th>Asset Name</th>
+                <th>Status</th>
+                <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="assetTableBody">
+                <!-- Injected via JS -->
+            </tbody>
+        </table>
+  </div>
+  </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="js/dashboard.js"></script>
+</body>
+</html>
+
+INVENZO/public/edit-asset.html ---
+
+INVENZO/public/add-asset.html ---
+
+INVENZO/public/css/styles.css ---
+
+body {
+    font-family: Arial;
+    background: #f0f4f7;
+    display: flex;
+    height: 100vh;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .login-container {
+    background: #fff;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 0 12px rgba(0,0,0,0.1);
+    width: 300px;
+  }
+  
+  input {
+    width: 100%;
+    margin: 10px 0;
+    padding: 0.7rem;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+  }
+  
+  button {
+    width: 100%;
+    padding: 0.8rem;
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+  
+  button:hover {
+    background: #0056b3;
+  }
+
+INVENZO/public/css/dashboard.css ---
+
+:root {
+    --bg: #f8f9fa;
+    --text: #1e293b;
+    --card-bg: #ffffff;
+    --sidebar-bg: #1e293b;
+    --sidebar-text: white;
+    --sidebar-hover: #334155;
+    --highlight: #60a5fa;
+    --badge-available: #16a34a;
+    --badge-checkedout: #dc2626;
+    --badge-other: #e2e8f0;
+  }
+  
+  [data-theme="dark"] {
+    --bg: #0f172a;
+    --text: #e2e8f0;
+    --card-bg: #1e293b;
+    --sidebar-bg: #0f172a;
+    --sidebar-text: #cbd5e1;
+    --sidebar-hover: #1e293b;
+    --highlight: #3b82f6;
+    --badge-other: #334155;
+  }
+  
+  body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--bg);
+    color: var(--text);
+    margin: 0;
+    transition: background 0.3s ease, color 0.3s ease;
+  }
+  
+  /* Sidebar */
+  .sidebar {
+    height: 100vh;
+    width: 240px;
+    background-color: var(--sidebar-bg);
+    color: var(--sidebar-text);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 2rem 1rem;
+    animation: fadeInSidebar 0.6s ease-in-out;
+  }
+  
+  .sidebar h4 {
+    text-align: center;
+    margin-bottom: 2rem;
+    font-weight: bold;
+  }
+  
+  .nav-links {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .sidebar a {
+    color: var(--sidebar-text);
+    padding: 0.75rem 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    border-radius: 8px;
+    text-decoration: none;
+    position: relative;
+    transition: all 0.3s ease-in-out;
+    overflow: hidden;
+  }
+  
+  .sidebar a::before {
+    content: '';
+    position: absolute;
+    height: 100%;
+    width: 4px;
+    background: var(--highlight);
+    left: 0;
+    top: 0;
+    transform: scaleY(0);
+    transition: transform 0.3s ease-in-out;
+  }
+  
+  .sidebar a:hover::before,
+  .sidebar a.active::before {
+    transform: scaleY(1);
+  }
+  
+  .sidebar a:hover,
+  .sidebar a.active {
+    background-color: var(--sidebar-hover);
+    transform: translateX(4px);
+  }
+  
+  /* Animations */
+  @keyframes fadeInSidebar {
+    from { opacity: 0; transform: translateX(-20px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  /* Cards */
+  .stats-card {
+    background: var(--card-bg);
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .stats-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.12);
+  }
+  
+  /* Table */
+  .table {
+    animation: fadeIn 0.6s ease-in-out;
+    background: var(--card-bg);
+    color: var(--text);
+  }
+  
+  .table thead {
+    background: var(--sidebar-hover);
+    color: var(--sidebar-text);
+  }
+  
+  /* Status Badges */
+  .status-badge {
+    padding: 0.3em 0.6em;
+    border-radius: 0.5em;
+    font-size: 0.85rem;
+    font-weight: 500;
+  }
+  
+  .badge-available {
+    background-color: var(--badge-available);
+    color: white;
+  }
+  
+  .badge-checkedout {
+    background-color: var(--badge-checkedout);
+    color: white;
+  }
+  
+  .badge-other {
+    background-color: var(--badge-other);
+    color: var(--text);
+  }
+  
+  .table-responsive {
+    scrollbar-width: thin;
+    scrollbar-color: #cbd5e1 #f8f9fa;
+  }
+  
+  .table-responsive::-webkit-scrollbar {
+    width: 6px;
+  }
+  
+  .table-responsive::-webkit-scrollbar-thumb {
+    background-color: #cbd5e1;
+    border-radius: 4px;
+  }
+
+INVENZO/public/js/assetForm.js ---
+
+NVENZO/public/js/auth.js ---
+
+INVENZO/public/js/dashboard.js ---
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const token = localStorage.getItem('token');
+    if (!token) return (window.location.href = 'login.html');
+  
+    fetch('/api/assets', {
+      headers: {
+        Authorization: 'Bearer ' + token
+      }
+    })
+      .then(res => res.json())
+      .then(data => {
+        populateTable(data);
+        updateStats(data);
+      })
+      .catch(err => {
+        console.error(err);
+        alert('Session expired. Please login again.');
+        window.location.href = 'login.html';
+      });
+  });
+  
+  function populateTable(assets) {
+    const tbody = document.getElementById('assetTableBody');
+    tbody.innerHTML = '';
+  
+    assets.forEach(asset => {
+      const statusClass =
+        asset.status === 'Available' ? 'badge-available' :
+        asset.status === 'Checked Out' ? 'badge-checkedout' : 'badge-other';
+  
+      const row = document.createElement('tr');
+      row.innerHTML = `
+        <td>${asset.id}</td>
+        <td>${asset.name}</td>
+        <td><span class="status-badge ${statusClass}">${asset.status}</span></td>
+        <td>
+          <i class="fas fa-edit text-primary me-2" style="cursor:pointer;"></i>
+          <i class="fas fa-trash text-danger" style="cursor:pointer;"></i>
+        </td>
+      `;
+      tbody.appendChild(row);
+    });
+  }
+  
+  function updateStats(assets) {
+    document.getElementById('totalAssets').textContent = assets.length;
+    document.getElementById('availableAssets').textContent = assets.filter(a => a.status === 'Available').length;
+    document.getElementById('checkedOutAssets').textContent = assets.filter(a => a.status === 'Checked Out').length;
+  }
+    
+  // Active link highlighting
+  const currentPath = window.location.pathname.split("/").pop();
+  document.querySelectorAll(".nav-link").forEach(link => {
+    if (link.getAttribute("href") === currentPath) {
+      link.classList.add("active");
+    }
+  });
+  
+  // Collapsible menus
+  document.querySelectorAll(".toggle").forEach(toggle => {
+    toggle.addEventListener("click", function () {
+      const nextMenu = this.nextElementSibling;
+      this.classList.toggle("collapsed");
+      nextMenu.style.display = nextMenu.style.display === "block" ? "none" : "block";
+    });
+  });
+  
+  // Fetch and load backend data
+  async function loadAssets() {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await fetch('/api/assets', {
+        headers: {
+          Authorization: 'Bearer ' + token
+        }
+      });
+      const assets = await response.json();
+  
+      let total = assets.length;
+      let available = assets.filter(a => a.status === "Available").length;
+      let checkedOut = assets.filter(a => a.status === "Checked Out").length;
+  
+      document.getElementById("totalAssets").textContent = total;
+      document.getElementById("availableAssets").textContent = available;
+      document.getElementById("checkedOutAssets").textContent = checkedOut;
+  
+      const tableBody = document.getElementById("assetTableBody");
+      tableBody.innerHTML = "";
+  
+      assets.forEach(asset => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${asset.id}</td>
+          <td>${asset.name}</td>
+          <td>
+            <span class="status-badge ${asset.status === 'Available' ? 'badge-available' : asset.status === 'Checked Out' ? 'badge-checkedout' : 'badge-other'}">
+              ${asset.status}
+            </span>
+          </td>
+          <td><button class="btn btn-sm btn-outline-primary">View</button></td>
+        `;
+        tableBody.appendChild(tr);
+      });
+    } catch (err) {
+      console.error("Failed to load assets:", err);
+      alert('Error loading data. Please try again later.');
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const username = localStorage.getItem('username');
+    if (username) {
+      document.getElementById('usernameDisplay').textContent = username;
+    }
+  });
+
+  function logout() {
+    localStorage.removeItem('token');
+    window.location.href = 'login.html';
+  }
+
+  function showAssets() {
+    document.getElementById('assetTableSection').classList.remove('d-none');
+  }
+ 
+  loadAssets();
+
+  public/js/login.js ---
+
+  document.getElementById('loginForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+  
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+  
+    const res = await fetch('/api/users/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ email, password })
+    });
+  
+    const data = await res.json();
+  
+    if (res.ok) {
+      // ✅ Save token
+      localStorage.setItem('token', data.token);
+  
+      // ✅ Save username (make sure backend sends data.user.name)
+      if (data.user && data.user.name) {
+        localStorage.setItem('username', data.user.name);
+      }
+  
+      // ✅ Redirect to dashboard
+      window.location.href = 'dashboard.html';
+    } else {
+      document.getElementById('error').textContent = data.message;
+    }
+  });
+
+INVENZO/public/js/signup.js ---
+
+  document.getElementById('signupForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+  
+    const name = document.getElementById('name').value;
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+  
+    try {
+      const res = await fetch('/api/users/signup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, email, password })
+      });
+  
+      const data = await res.json();
+  
+      if (res.ok) {
+        alert('🎉 Signup successful! Please log in.');
+        window.location.href = 'login.html';
+      } else {
+        document.getElementById('signupError').textContent = data.message;
+      }
+    } catch (err) {
+      console.error(err);
+      document.getElementById('signupError').textContent = 'Signup failed. Please try again.';
+    }
+  });
+
+INVENZO/server/controllers/assetControl.js ---
+
+    const db = require('../db');
+
+    exports.getAllAssets = async (req, res) => {
+    try {
+        const [assets] = await db.query('SELECT * FROM assets');
+        res.json(assets);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: 'Error fetching assets' });
+    }
+    };
+
+INVENZO/server/controllers/userControl.js ---
+
+    const db = require('../db');
+    const bcrypt = require('bcrypt');
+    const jwt = require('jsonwebtoken');
+
+    // SIGNUP CONTROLLER
+    exports.signup = async (req, res) => {
+    const { name, email, password } = req.body;
+
+    try {
+        // Check if user already exists
+        const [existing] = await db.query('SELECT id FROM users WHERE email = ?', [email]);
+        if (existing.length > 0) {
+        return res.status(400).json({ message: 'User already exists.' });
+        }
+
+        // Hash password
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        // Insert user
+        await db.query(
+        'INSERT INTO users (name, email, password) VALUES (?, ?, ?)',
+        [name, email, hashedPassword]
+        );
+
+        res.status(201).json({ message: 'User created successfully.' });
+    } catch (err) {
+        console.error('Signup Error:', err);
+        res.status(500).json({ message: 'Server error during signup.' });
+    }
+    };
+
+    // LOGIN CONTROLLER
+    exports.login = async (req, res) => {
+    const { email, password } = req.body;
+
+    try {
+        // Find user by email
+        const [users] = await db.query('SELECT * FROM users WHERE email = ?', [email]);
+        if (users.length === 0) {
+        return res.status(401).json({ message: 'Invalid email or password.' });
+        }
+
+        const user = users[0];
+
+        // Compare password
+        const match = await bcrypt.compare(password, user.password);
+        if (!match) {
+        return res.status(401).json({ message: 'Invalid email or password.' });
+        }
+
+        // Generate JWT token
+        const token = jwt.sign(
+        { userId: user.id, email: user.email },
+        process.env.JWT_SECRET,
+        { expiresIn: '1h' }
+        );
+
+        // Respond with token and user info
+        res.json({
+        message: 'Login successful',
+        token,
+        user: {
+            id: user.id,
+            name: user.name, // ✅ will be stored in localStorage
+            email: user.email
+        }
+        });
+    } catch (err) {
+        console.error('Login Error:', err);
+        res.status(500).json({ message: 'Server error during login.' });
+    }
+    };
+
+INVENZO/server/middleware/auth.js ---
+
+    const jwt = require('jsonwebtoken');
+
+    module.exports = (req, res, next) => {
+    const authHeader = req.headers.authorization;
+    if (!authHeader) return res.status(401).json({ message: 'No token provided' });
+
+    const token = authHeader.split(' ')[1];
+    try {
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        req.user = decoded;
+        next();
+    } catch (err) {
+        return res.status(401).json({ message: 'Invalid token' });
+    }
+    };
+
+INVENZO/server/routes/assets.js ---
+
+    const express = require('express');
+    const router = express.Router();
+    const assetController = require('../controllers/assetController');
+    const auth = require('../middleware/auth');
+
+    // Protect with auth middleware
+    router.get('/', auth, assetController.getAllAssets);
+
+    module.exports = router;
+
+INVENZO/server/routes/users.js ---
+
+    const express = require('express');
+    const router = express.Router();
+    const userController = require('../controllers/userController');
+
+    // Route: POST /api/users/signup
+    router.post('/signup',userController.signup);
+    // Route: POST /api/users/login
+    router.post('/login', userController.login);
+
+    module.exports = router;
+
+INVENZO/server/app.js ----
+
+    const express = require('express');
+    const app = express();
+    const userRoutes = require('./routes/users');
+
+    const assetRoutes = require('./routes/assets');
+    app.use('/api/assets', assetRoutes);
+
+    require('dotenv').config();
+    const db = require('./db')
+
+    app.use(express.json()); // to parse JSON bodies
+    app.use('/api/users', userRoutes); // mount routes
+
+    app.get('/', (req, res) => {
+        res.send('INVENZO Server is running 🚀');
+    });
+
+    app.listen(3000, () => {
+    console.log('✅ Server listening at http://localhost:3000');
+    });
+
+    const path = require('path');
+
+    // Serve static files from 'public' folder
+    app.use(express.static(path.join(__dirname, '../public')));
+
+INVENZO/server/db.js ----
+
+    require('dotenv').config();
+    // console.log('DB_USER:', process.env.DB_USER);
+    // console.log('DB_PASS:', process.env.DB_PASS);
+    const mysql = require('mysql2');
+
+
+    const pool = mysql.createPool({
+        host: process.env.DB_HOST,
+        user: process.env.DB_USER,
+        password: process.env.DB_PASS,
+        database: process.env.DB_NAME
+    });
+
+    pool.getConnection((err,connection) => {
+        if (err){
+            console.error('MySQL connection failed..',err.message);
+        }
+        else{
+            console.log('MySQL connection is successfull..');
+            connection.release();
+        }
+
+    });
+
+    module.exports = pool.promise();

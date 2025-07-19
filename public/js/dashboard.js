@@ -1,43 +1,62 @@
+console.log("🔥 dashboard.js loaded");
+const logoutBtn = document.getElementById('logoutBtn');
+if (logoutBtn) {
+  logoutBtn.addEventListener('click', () => {
+    console.log("🚪 Logout clicked");
+    localStorage.removeItem('token');
+    window.location.href = 'login.html';
+  });
+}
+
+console.log("🔍 Logout button found:", logoutBtn);
 document.addEventListener('DOMContentLoaded', () => {
-    const token = localStorage.getItem('token');
-    const assetBody = document.getElementById('assetBody');
-  
-    if (!token) {
-      window.location.href = 'login.html'; // Not logged in
-      return;
+  const username = localStorage.getItem('username');
+  const usernameEl = document.getElementById('usernameDisplay');
+  if (username && usernameEl) {
+    usernameEl.textContent = username;
+  }
+
+  const token = localStorage.getItem('token');
+  if (!token) {
+    console.error("No token found. Redirecting to login.");
+    return (window.location.href = 'login.html');
+  }
+
+  fetch('/api/assets', {
+    headers: {
+      Authorization: 'Bearer ' + token
     }
-  
-    fetch('/api/assets', {
-      headers: {
-        'Authorization': 'Bearer ' + token
+  })
+    .then(res => {
+      if (!res.ok) {
+        throw new Error(`Failed to fetch assets: ${res.status}`);
+      }
+      return res.json();
+    })
+    .then(data => {
+      const totalEl = document.getElementById('totalAssets');
+      const availableEl = document.getElementById('availableAssets');
+      const checkedOutEl = document.getElementById('checkedOutAssets');
+
+      const total = data.length;
+      const available = data.filter(asset => asset.status === 'Available').length;
+      const checkedOut = data.filter(asset => asset.status === 'Checked Out').length;
+
+      if (totalEl) {
+        totalEl.textContent = total;
+        totalEl.innerHTML = total;
+      }
+      if (availableEl) {
+        availableEl.textContent = available;
+        availableEl.innerHTML = available;
+      }
+      if (checkedOutEl) {
+        checkedOutEl.textContent = checkedOut;
+        checkedOutEl.innerHTML = checkedOut;
       }
     })
-      .then(res => res.json())
-      .then(data => {
-        if (!data || data.length === 0) {
-          assetBody.innerHTML = '<tr><td colspan="4">No assets found</td></tr>';
-          return;
-        }
-  
-        data.forEach(asset => {
-          const row = `
-            <tr>
-              <td>${asset.id}</td>
-              <td>${asset.name}</td>
-              <td>${asset.category}</td>
-              <td>${asset.status}</td>
-            </tr>
-          `;
-          assetBody.innerHTML += row;
-        });
-      })
-      .catch(err => {
-        console.error(err);
-        assetBody.innerHTML = '<tr><td colspan="4">Error loading assets</td></tr>';
-      });
-  
-    document.getElementById('logoutBtn').addEventListener('click', () => {
-      localStorage.removeItem('token');
-      window.location.href = 'login.html';
+    .catch(err => {
+      console.error('Error fetching asset stats:', err);
     });
-  });
+});
+

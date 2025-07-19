@@ -1,0 +1,89 @@
+/* Asset Manage Styles */
+body {
+  background-color: #f4f6f9;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.card {
+  border-radius: 1rem;
+  overflow: hidden;
+}
+
+.card-header {
+  background: linear-gradient(to right, #007bff, #0056b3);
+  color: white;
+  font-weight: 600;
+  padding: 1.25rem 1.5rem;
+}
+
+.table th,
+.table td {
+  vertical-align: middle;
+}
+
+.status-badge {
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  color: #fff;
+  display: inline-block;
+  font-weight: 500;
+}
+
+.badge-available {
+  background-color: #28a745;
+}
+
+.badge-checkedout {
+  background-color: #dc3545;
+}
+
+.badge-other {
+  background-color: #6c757d;
+}
+
+tbody tr {
+  transition: all 0.3s ease-in-out;
+}
+
+tbody tr:hover {
+  background-color: #f1f1f1;
+  transform: scale(1.01);
+  cursor: pointer;
+}
+
+.table-responsive {
+  animation-duration: 0.8s;
+}
+/* Center the table container horizontally and add spacing from top */
+.container {
+  display: flex;
+  justify-content: center;
+  padding-top: 2rem;
+}
+
+/* Enhanced table styling */
+table {
+  border-collapse: separate;
+  border-spacing: 0;
+  background-color: white;
+  border-radius: 1rem;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+thead th {
+  background-color: #343a40;
+  color: white;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+tbody tr:nth-child(even) {
+  background-color: #f8f9fa;
+}
+
+tbody tr:nth-child(odd) {
+  background-color: #ffffff;
+}
