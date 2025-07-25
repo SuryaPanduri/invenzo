@@ -10,6 +10,12 @@ const assetRoutes = require('./routes/assets');
 // Middleware to parse JSON
 app.use(express.json());
 
+// ✅ Log every request to help debug routing issues
+// app.use((req, res, next) => {
+//   console.log(`${req.method} ${req.originalUrl}`);
+//   next();
+// });
+
 // ✅ Serve static files from the 'public' directory (must be BEFORE routes for HTML + CSS + JS to work)
 app.use(express.static(path.join(__dirname, '../public')));
 

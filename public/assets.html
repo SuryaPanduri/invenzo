@@ -9,40 +9,166 @@
   <link href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css" rel="stylesheet" />
 </head>
 <body>
-    <div class="container py-5 animate__animated animate__fadeIn">
-        <div class="row justify-content-center">
-          <div class="col-lg-10">
-            <div class="card shadow-lg rounded-4 border-0">
-                <div class="card-header bg-primary text-white rounded-top-4 d-flex justify-content-between align-items-center">
-                  <h2 class="mb-0">Asset Inventory</h2>
-                  <div class="d-flex align-items-center gap-3">
-                    <a href="add-asset.html" class="btn btn-light text-primary fw-bold">+ Add Asset</a>
-                    <i class="fas fa-box fa-lg"></i>
-                  </div>
-                </div>
-            </div>
-        </div>
-    </div>
+  <div class="container-fluid py-5 animate__animated animate__fadeIn">
+    <div class="card shadow-lg rounded-4 border-0 px-4 py-3">
+      
+      <!-- Title & Button -->
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="fw-bold text-primary">Asset Inventory</h2>
+        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#assetModal">
+            + Add Asset
+          </button>
+      </div>
+
+      <!-- Table -->
       <div class="card-body p-0">
-        <div id="assetTableSection" class="table-responsive animate__animated animate__fadeInUp animate__fast" style="max-height: 500px; overflow-y: auto;">
-            <table class="table table-bordered table-hover text-center">
-              <thead class="table-dark">
-                <tr>
-                  <th>ID</th>
-                  <th>Name</th>
-                  <th>Status</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody id="assetTableBody">
-                <!-- Injected via JS -->
-              </tbody>
-            </table>
+        <div id="assetTableSection" class="table-responsive animate__animated animate__fadeInUp animate__fast w-100" style="max-height: 500px; overflow-y: auto;">
+          <table class="table table-bordered table-hover text-center w-100">
+            <thead class="table-dark sticky-top">
+              <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Status</th>
+                <th>Created At</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="assetTableBody">
+              <!-- Injected via JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Add Asset Modal -->
+  <div class="modal fade" id="assetModal" tabindex="-1" aria-labelledby="assetModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <form id="assetForm">
+          <div class="modal-header">
+            <h5 class="modal-title" id="assetModalLabel">Add New Asset</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+       
+
+            <input type="text" name="name" class="form-control mb-3" placeholder="Asset Name" required />
+
+            <input type="text" name="type" class="form-control mb-3" placeholder="Asset Type" required />
+
+            <input type="date" name="purchase_date" class="form-control mb-3" placeholder="Purchase Date" required />
+
+            <select name="status" class="form-control mb-3" required>
+              <option value="">Select Status</option>
+              <option value="Available">Available</option>
+              <option value="Checked Out">Checked Out</option>
+              <option value="Under Maintenance">Under Maintenance</option>
+            </select>
+
+            <input type="text" name="serial_number" class="form-control mb-3" placeholder="Serial Number" required />
+
+            <textarea name="notes" class="form-control mb-3" rows="2" placeholder="Notes"></textarea>
+          </div>
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-primary">Save Asset</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- View Asset Modal -->
+<!-- Asset Details Modal -->
+<div class="modal fade" id="viewAssetModal" tabindex="-1" aria-labelledby="viewAssetModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content border-0 shadow-lg">
+        <div class="modal-header bg-primary text-white">
+          <h5 class="modal-title" id="viewAssetModalLabel">📦 Asset Details</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body px-4 py-3">
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="fw-bold">Asset ID:</label>
+              <div class="form-control-plaintext" id="viewAssetId"></div>
+            </div>
+            <div class="col-md-6">
+              <label class="fw-bold">Asset Name:</label>
+              <div class="form-control-plaintext" id="viewAssetName"></div>
+            </div>
+            <div class="col-md-6">
+              <label class="fw-bold">Status:</label>
+              <div class="form-control-plaintext" id="viewAssetStatus"></div>
+            </div>
+            <div class="col-md-6">
+              <label class="fw-bold">Purchase Date:</label>
+              <div class="form-control-plaintext" id="viewAssetPurchaseDate"></div>
+            </div>
+            <div class="col-md-6">
+              <label class="fw-bold">Serial Number:</label>
+              <div class="form-control-plaintext" id="viewAssetSerial"></div>
+            </div>
+            <div class="col-12">
+              <label class="fw-bold">Description:</label>
+              <div class="form-control-plaintext" id="viewAssetDescription"></div>
+            </div>
+            <div class="col-12">
+              <label class="fw-bold">Notes:</label>
+              <div class="form-control-plaintext" id="viewAssetNotes"></div>
+            </div>
+            <div class="col-md-6">
+              <label class="fw-bold">Created At:</label>
+              <div class="form-control-plaintext" id="viewAssetCreatedAt"></div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </div>
 
+  <!-- Edit Asset Modal -->
+  <div class="modal fade" id="editAssetModal" tabindex="-1" aria-labelledby="editAssetModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <form id="editAssetForm">
+          <div class="modal-header">
+            <h5 class="modal-title" id="editAssetModalLabel">Edit Asset</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <input type="hidden" id="editAssetId" name="id" />
+
+            <input type="text" name="name" id="editAssetName" class="form-control mb-3" placeholder="Asset Name" required />
+
+            <input type="text" name="type" id="editAssetType" class="form-control mb-3" placeholder="Asset Type" required />
+
+            <input type="date" name="purchase_date" id="editAssetPurchaseDate" class="form-control mb-3" placeholder="Purchase Date" required />
+
+            <select name="status" id="editAssetStatus" class="form-control mb-3" required>
+              <option value="">Select Status</option>
+              <option value="Available">Available</option>
+              <option value="Checked Out">Checked Out</option>
+              <option value="Under Maintenance">Under Maintenance</option>
+            </select>
+
+            <input type="text" name="serial_number" id="editAssetSerialNumber" class="form-control mb-3" placeholder="Serial Number" required />
+
+            <textarea name="notes" id="editAssetNotes" class="form-control mb-3" rows="2" placeholder="Notes"></textarea>
+          </div>
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-success">Update Asset</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+</script>
   <script type="module" src="js/assetManage.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
 </body>
 </html>
