@@ -23,9 +23,8 @@ app.use(express.static(path.join(__dirname, '../public')));
 app.use('/api/users', userRoutes);
 app.use('/api/assets', require('./routes/assets'));
 
-// ✅ Root route for test
 app.get('/', (req, res) => {
-  res.send('INVENZO Server is running 🚀');
+  res.sendFile(path.join(__dirname, '../public/index.html'));
 });
 
 // ✅ Start the server

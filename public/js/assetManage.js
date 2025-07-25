@@ -1,30 +1,49 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const token = localStorage.getItem('token');
-    if (!token) return (window.location.href = 'login.html');
+  const token = localStorage.getItem('token');
+  if (!token) return (window.location.href = 'login.html');
+
+  loadAssets(); // Call the main function to load data
+
+  // Add event listeners for live filtering
+  document.getElementById('searchInput').addEventListener('input', loadAssets);
+  document.getElementById('statusFilter').addEventListener('change', loadAssets);
+});
   
-    loadAssets(); // Call the main function to load data
+// Filtering function moved outside loadAssets for reusability
+function applyFilters(assets) {
+  const searchValue = document.getElementById("searchInput").value.toLowerCase();
+  const statusValue = document.getElementById("statusFilter").value;
+
+  return assets.filter(asset => {
+    const matchesSearch =
+      asset.name.toLowerCase().includes(searchValue) ||
+      asset.serial_number?.toLowerCase().includes(searchValue);
+    const matchesStatus = !statusValue || asset.status === statusValue;
+    return matchesSearch && matchesStatus;
   });
-  
-  // Function to load asset data and populate table + stats
-  async function loadAssets() {
-    try {
-      const token = localStorage.getItem('token');
-      const response = await fetch('/api/assets', {
-        headers: {
-          Authorization: 'Bearer ' + token
-        }
-      });
-  
-      const assets = await response.json();
-      populateTable(assets);
-      updateStats(assets);
-  
-    } catch (err) {
-      console.error("Failed to load assets:", err);
-      alert('Error loading data. Please login again.');
-      window.location.href = 'login.html';
-    }
+}
+
+// Function to load asset data and populate table + stats
+async function loadAssets() {
+  try {
+    const token = localStorage.getItem('token');
+    const response = await fetch('/api/assets', {
+      headers: {
+        Authorization: 'Bearer ' + token
+      }
+    });
+
+    const assets = await response.json();
+    const filteredAssets = applyFilters(assets);
+    populateTable(filteredAssets);
+    updateStats(filteredAssets);
+
+  } catch (err) {
+    console.error("Failed to load assets:", err);
+    alert('Error loading data. Please login again.');
+    window.location.href = 'login.html';
   }
+}
   
   // Insert assets into table
   function populateTable(assets) {
