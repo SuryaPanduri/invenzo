@@ -1,0 +1,66 @@
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: #f8f9fa;
+}
+h1 {
+  font-weight: 1000;
+  background-image: linear-gradient(to right, #007bff, #0056b3);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent; /* fallback for non-webkit browsers */
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  margin-bottom: 0;
+}
+.header-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+.table-hover tbody tr:hover {
+  background-color: #f1f1f1;
+  transition: background-color 0.3s ease-in-out;
+}
+.btn-primary, .btn-success, .btn-warning, .btn-danger {
+  transition: all 0.3s ease-in-out;
+}
+.btn-primary:hover {
+  background-color: #0056b3;
+}
+.modal-content {
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  animation: fadeInUp 0.4s ease-in-out;
+}
+@keyframes fadeInUp {
+  from {
+    transform: translateY(30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+#searchInput {
+  border-radius: 8px;
+}
+#roleFilter {
+  border-radius: 8px;
+}
+.form-control, .form-select {
+  border-radius: 8px;
+}
+
+
+.table {
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.table td button {
+  border-radius: 6px;
+}

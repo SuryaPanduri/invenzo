@@ -87,3 +87,7 @@ tbody tr:nth-child(even) {
 tbody tr:nth-child(odd) {
   background-color: #ffffff;
 }
+
+.table td button {
+  border-radius: 6px;
+}

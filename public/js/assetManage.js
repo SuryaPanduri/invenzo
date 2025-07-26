@@ -1,6 +1,13 @@
 document.addEventListener('DOMContentLoaded', () => {
   const token = localStorage.getItem('token');
+  const role = localStorage.getItem('role');
   if (!token) return (window.location.href = 'login.html');
+
+  // 🔒 Hide "Add Asset" button for non-admins
+  if (role !== 'admin') {
+    const addAssetBtn = document.getElementById('addAssetBtn');
+    if (addAssetBtn) addAssetBtn.style.display = 'none';
+  }
 
   loadAssets(); // Call the main function to load data
 
@@ -49,6 +56,7 @@ async function loadAssets() {
   function populateTable(assets) {
     const tbody = document.getElementById('assetTableBody');
     tbody.innerHTML = '';
+    const role = localStorage.getItem('role');
   
     assets.forEach(asset => {
       const statusClass =
@@ -63,8 +71,8 @@ async function loadAssets() {
         <td>${new Date(asset.created_at).toLocaleString()}</td>
         <td>
             <button class="btn btn-sm btn-info me-2 view-btn" data-id="${asset.id}">View</button>
-            <button class="btn btn-sm btn-warning me-2 edit-btn" data-id="${asset.id}">Edit</button>
-            <button class="btn btn-sm btn-danger delete-btn" data-id="${asset.id}">Delete</button>
+            ${role === 'admin' || role === 'manager' ? `<button class="btn btn-sm btn-warning me-2 edit-btn" data-id="${asset.id}">Edit</button>` : ''}
+            ${role === 'admin' ? `<button class="btn btn-sm btn-danger delete-btn" data-id="${asset.id}">Delete</button>` : ''}
         </td>
       `;
       tbody.appendChild(row);

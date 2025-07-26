@@ -17,7 +17,10 @@
       <!-- Filter Section -->
       <div class="row mb-3 align-items-end">
         <div class="col-md-4">
-          <input type="text" id="searchInput" class="form-control" placeholder="Search by Name or Serial..." />
+          <div class="input-group">
+            <input type="text" id="searchInput" class="form-control" placeholder="Search by Name or Serial..." />
+            <span class="input-group-text"><i class="fas fa-search"></i></span>
+          </div>
         </div>
         <div class="col-md-4">
           <select id="statusFilter" class="form-select">
@@ -28,7 +31,7 @@
           </select>
         </div>
         <div class="col-md-4 text-end">
-          <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#assetModal">
+          <button id="addAssetBtn" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#assetModal">
             + Add Asset
           </button>
         </div>

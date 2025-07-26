@@ -1,4 +1,15 @@
 console.log("🔥 dashboard.js loaded");
+
+function loadJwtDecodeScript() {
+  return new Promise((resolve, reject) => {
+    if (window.jwt_decode) return resolve();
+    const script = document.createElement('script');
+    script.src = 'https://cdn.jsdelivr.net/npm/jwt-decode/build/jwt-decode.min.js';
+    script.onload = resolve;
+    script.onerror = reject;
+    document.head.appendChild(script);
+  });
+}
 const logoutBtn = document.getElementById('logoutBtn');
 if (logoutBtn) {
   logoutBtn.addEventListener('click', () => {
@@ -9,8 +20,9 @@ if (logoutBtn) {
 }
 
 console.log("🔍 Logout button found:", logoutBtn);
-document.addEventListener('DOMContentLoaded', () => {
-  const username = localStorage.getItem('username');
+document.addEventListener('DOMContentLoaded', async () => {
+  await loadJwtDecodeScript();
+  const username = localStorage.getItem('userName');
   const usernameEl = document.getElementById('usernameDisplay');
   if (username && usernameEl) {
     usernameEl.textContent = username;
@@ -21,6 +33,15 @@ document.addEventListener('DOMContentLoaded', () => {
     console.error("No token found. Redirecting to login.");
     return (window.location.href = 'login.html');
   }
+
+  // Decode JWT and extract role
+  const decoded = jwt_decode(token);
+  const role = decoded.role;
+
+  // Role-based UI logic
+  document.querySelectorAll('.admin-only').forEach(el => {
+    el.style.display = role === 'admin' ? 'block' : 'none';
+  });
 
   fetch('/api/assets', {
     headers: {
@@ -139,6 +160,30 @@ async function loadAnalytics() {
       }
     });
   }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  const token = localStorage.getItem('token');
+  if (!token) return (window.location.href = 'login.html');
+
+  // Decode token payload
+  const decodedToken = jwt_decode(token);
+  const role = decodedToken.role;
+
+  // Update UI based on role
+  updateUIBasedOnRole(role);
+});
+
+function updateUIBasedOnRole(role) {
+  // Hide all role-based sections first
+  document.querySelectorAll('.admin-only, .manager-only, .viewer-only').forEach(el => {
+    el.style.display = 'none';
+  });
+
+  // Show only the matching role's sections
+  document.querySelectorAll(`.${role}-only`).forEach(el => {
+    el.style.display = 'block';
+  });
 }
 
 loadAnalytics();
