@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const assetController = require('../controllers/assetController');
 const auth = require('../middleware/auth');
+const authorize = require('../middleware/authorize');
 const db = require('../db');
 
 const analyticsController = require('../controllers/analyticsController.js ');
@@ -12,10 +13,11 @@ router.get('/analytics', auth, analyticsController.getAnalytics);
 
 // Protect with auth middleware
 router.get('/', auth, assetController.getAllAssets);
-router.post('/', auth, assetController.addAsset);
-router.put('/:id', auth, assetController.updateAsset);
+router.post('/', auth, authorize('admin'),assetController.addAsset);
+router.put('/:id', auth, authorize('admin','manager'),assetController.updateAsset);
+
 // DELETE /api/assets/:id
-router.delete('/:id', auth, assetController.deleteAsset);
+router.delete('/:id', auth, authorize('admin'), assetController.deleteAsset);
 
 // GET asset by ID
 router.get('/:id', auth, async (req, res) => {
