@@ -5,7 +5,7 @@ const auth = require('../middleware/auth');
 const authorize = require('../middleware/authorize');
 const db = require('../db');
 
-const analyticsController = require('../controllers/analyticsController.js ');
+const analyticsController = require('../controllers/analyticsController.js');
 
 // Add this route for analytics
 router.get('/analytics', auth, analyticsController.getAnalytics);
