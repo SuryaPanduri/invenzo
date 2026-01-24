@@ -2,12 +2,12 @@ const db = require('../db');
 
 exports.getAnalytics = async (req, res) => {
   try {
-    const [assets] = await db.query('SELECT status FROM assets');
+    const result = await db.query('SELECT status FROM assets');
+    const assets = result.rows;
 
     const available = assets.filter(a => a.status === 'Available').length;
     const checkedOut = assets.filter(a => a.status === 'Checked Out').length;
 
-    // Temporary static data for mostUsed (until checkouts table is created)
     const mostUsed = [
       { name: 'Laptop', usageCount: 12 },
       { name: 'Projector', usageCount: 9 },
