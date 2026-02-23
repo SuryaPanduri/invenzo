@@ -93,3 +93,15 @@ npm run dev
   1. `DATABASE_URL` (or selected `DATABASE_URL_LOCAL/REMOTE`)
   2. `PG*` or `DB*` variables
 - For hosting, set `DB_TARGET=remote` and provide `DATABASE_URL_REMOTE`.
+
+## Forgot Password Email Providers
+- Supported providers: `resend`, `sendgrid`
+- Required env:
+  - `APP_BASE_URL` (example: `https://your-app.example.com`)
+  - `EMAIL_PROVIDER` (`resend` or `sendgrid`)
+  - `EMAIL_FROM` (verified sender)
+- Provider keys:
+  - Resend: `RESEND_API_KEY`
+  - SendGrid: `SENDGRID_API_KEY`
+- In production, reset token is not returned in API response.
+- Optional for staging/dev only: `ALLOW_DEV_RESET_TOKEN=true`

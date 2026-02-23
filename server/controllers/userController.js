@@ -3,6 +3,7 @@ const db = require('../db');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { normalizeRole } = require('../middleware/validate');
+const { sendResetPasswordEmail } = require('../services/emailService');
 
 function hashResetToken(token) {
   return crypto.createHash('sha256').update(token).digest('hex');
@@ -95,13 +96,33 @@ exports.forgotPassword = async (req, res) => {
       [tokenHash, email]
     );
 
+    const appBaseUrl = process.env.APP_BASE_URL || `${req.protocol}://${req.get('host')}`;
+    const resetUrl = `${appBaseUrl.replace(/\/$/, '')}/reset-password.html?token=${rawToken}`;
+
+    let emailSendError = null;
+    try {
+      await sendResetPasswordEmail({ to: email, resetUrl });
+    } catch (err) {
+      emailSendError = err;
+      console.error('Forgot password email send failed:', err.message);
+    }
+
     const payload = {
       message: 'If that email exists, password reset instructions have been generated.'
     };
 
-    if (process.env.NODE_ENV !== 'production') {
+    if (emailSendError) {
+      if (process.env.NODE_ENV === 'production' && process.env.ALLOW_DEV_RESET_TOKEN !== 'true') {
+        return res.status(500).json({
+          message: 'Reset email could not be sent. Please contact support.',
+          code: 'EMAIL_SEND_FAILED'
+        });
+      }
+    }
+
+    if (process.env.NODE_ENV !== 'production' || process.env.ALLOW_DEV_RESET_TOKEN === 'true') {
       payload.resetToken = rawToken;
-      payload.resetUrl = `/reset-password.html?token=${rawToken}`;
+      payload.resetUrl = resetUrl;
     }
 
     return res.json(payload);
