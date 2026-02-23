@@ -1,22 +1,36 @@
 const db = require('../db');
 
-/**
- * GET ALL ASSETS
- */
 exports.getAllAssets = async (req, res) => {
   try {
-    const result = await db.query('SELECT * FROM assets ORDER BY id DESC');
+    const result = await db.query(`
+      SELECT
+        a.*,
+        active.due_date AS current_due_date,
+        active.checked_out_to_user_id,
+        active.checked_out_to_name AS current_assignee
+      FROM assets a
+      LEFT JOIN LATERAL (
+        SELECT
+          ac.due_date,
+          ac.checked_out_to_user_id,
+          u.name AS checked_out_to_name
+        FROM asset_checkouts ac
+        LEFT JOIN users u ON u.id = ac.checked_out_to_user_id
+        WHERE ac.asset_id = a.id
+          AND ac.returned_at IS NULL
+        ORDER BY ac.checkout_date DESC
+        LIMIT 1
+      ) active ON true
+      ORDER BY a.id DESC
+    `);
+
     res.json(result.rows);
   } catch (err) {
-    console.error('❌ Fetch assets error:', err);
+    console.error('Fetch assets error:', err);
     res.status(500).json({ message: 'Error fetching assets' });
   }
 };
 
-/**
- * ADD NEW ASSET
- * NOTE: id is SERIAL in Postgres → do NOT pass id manually
- */
 exports.addAsset = async (req, res) => {
   const { name, type, purchase_date, status, serial_number, notes } = req.body;
 
@@ -33,14 +47,11 @@ exports.addAsset = async (req, res) => {
       assetId: result.rows[0].id
     });
   } catch (err) {
-    console.error('❌ Add asset error:', err);
+    console.error('Add asset error:', err);
     res.status(500).json({ message: 'Failed to add asset' });
   }
 };
 
-/**
- * UPDATE ASSET
- */
 exports.updateAsset = async (req, res) => {
   const { id } = req.params;
   const { name, type, purchase_date, status, serial_number, notes } = req.body;
@@ -64,22 +75,16 @@ exports.updateAsset = async (req, res) => {
 
     res.json({ message: 'Asset updated successfully' });
   } catch (err) {
-    console.error('❌ Update asset error:', err);
+    console.error('Update asset error:', err);
     res.status(500).json({ message: 'Failed to update asset' });
   }
 };
 
-/**
- * DELETE ASSET
- */
 exports.deleteAsset = async (req, res) => {
   const { id } = req.params;
 
   try {
-    const result = await db.query(
-      'DELETE FROM assets WHERE id = $1',
-      [id]
-    );
+    const result = await db.query('DELETE FROM assets WHERE id = $1', [id]);
 
     if (result.rowCount === 0) {
       return res.status(404).json({ message: 'Asset not found' });
@@ -87,32 +92,7 @@ exports.deleteAsset = async (req, res) => {
 
     res.json({ message: 'Asset deleted successfully' });
   } catch (err) {
-    console.error('❌ Delete asset error:', err);
+    console.error('Delete asset error:', err);
     res.status(500).json({ message: 'Internal server error' });
-  }
-};
-
-/**
- * ANALYTICS (BASIC)
- */
-exports.getAnalytics = async (req, res) => {
-  try {
-    const result = await db.query('SELECT status FROM assets');
-    const assets = result.rows;
-
-    const available = assets.filter(a => a.status === 'Available').length;
-    const checkedOut = assets.filter(a => a.status === 'Checked Out').length;
-
-    // Static placeholder until checkout table exists
-    const mostUsed = [
-      { name: 'Laptop', usageCount: 12 },
-      { name: 'Projector', usageCount: 9 },
-      { name: 'Chair', usageCount: 6 }
-    ];
-
-    res.json({ available, checkedOut, mostUsed });
-  } catch (err) {
-    console.error('❌ Analytics fetch error:', err);
-    res.status(500).json({ message: 'Error fetching analytics data' });
   }
 };

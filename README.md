@@ -1,79 +1,95 @@
-# INVENZO – Asset Management System 🧾💼
+# INVENZO - Asset Management System
 
-INVENZO is a lightweight web-based asset management system built using **HTML**, **CSS**, **JavaScript**, **Node.js**, and **MySQL**. Inspired by AssetTiger, it helps organizations keep track of their assets, check-ins/check-outs, and asset history.
+INVENZO is a web-based asset management system built with HTML/CSS/JavaScript, Node.js, Express, and PostgreSQL.
 
----
+## Current Features
+- JWT-based authentication (`signup`, `login`)
+- Role-based authorization (`admin`, `manager`, `viewer`)
+- Asset CRUD APIs and dashboard views
+- Basic analytics endpoint
+- PostgreSQL migration runner
 
-## 🚀 Features
+## Tech Stack
+- Frontend: HTML, CSS, JavaScript, Bootstrap
+- Backend: Node.js, Express
+- Database: PostgreSQL (`pg`)
+- Auth: JWT + bcrypt
 
-- 🔐 Secure Signup/Login with JWT Authentication
-- 🧾 Add, edit, delete assets
-- 📦 Check-in / Check-out system (coming soon)
-- 📊 Dashboard for managing and viewing asset inventory
-- 👤 Role-based access (coming soon)
+## Setup
+1. Install dependencies
+```bash
+npm install
+```
 
----
+2. Create env file from example (either location works)
+```bash
+cp .env.example .env
+# or
+cp server/.env.example server/.env
+```
 
-## 🛠️ Tech Stack
+3. Update env values (`.env` or `server/.env`)
+```env
+PORT=3000
+JWT_SECRET=change_me_super_secret
+DB_TARGET=local
+DATABASE_URL_LOCAL=postgres://postgres:postgres@localhost:5432/invenzo
+# DATABASE_URL_REMOTE=postgres://user:pass@host:5432/invenzo_prod
+```
 
-| Layer         | Technology       |
-|---------------|------------------|
-| Frontend      | HTML, CSS, JavaScript |
-| Backend       | Node.js, Express.js |
-| Database      | MySQL |
-| Auth          | JWT (JSON Web Tokens) |
-| Environment   | dotenv |
+4. Run migrations
+```bash
+npm run migrate
+```
 
----
+5. Start app
+```bash
+npm run dev
+```
 
-✅ Setup Instructions
+6. Open app
+- `http://localhost:3000/login.html`
 
-**1.Clone the repo**
+## NPM Scripts
+- `npm run dev` - run with nodemon
+- `npm start` - run server
+- `npm run migrate` - apply SQL migrations
+- `npm run lint` - run eslint
+- `npm test` - run jest tests
+- `npm run format` - run prettier
 
-        git clone https://github.com/SuryaPanduri/invenzo.git
-        cd invenzo
+## API (Core)
+- `POST /api/users/signup`
+- `POST /api/users/login`
+- `POST /api/users/forgot-password`
+- `POST /api/users/reset-password`
+- `GET /api/users` (auth + role)
+- `POST /api/users` (admin)
+- `PUT /api/users/:id` (admin/manager)
+- `DELETE /api/users/:id` (admin)
+- `GET /api/assets` (auth)
+- `POST /api/assets` (admin)
+- `PUT /api/assets/:id` (admin/manager)
+- `DELETE /api/assets/:id` (admin)
+- `GET /api/assets/analytics` (auth)
+- `GET /api/assets/analytics/summary` (auth)
+- `GET /api/assets/analytics/top-used` (auth)
+- `GET /api/assets/analytics/monthly-checkouts` (auth)
+- `POST /api/assets/:id/checkout` (admin/manager)
+- `POST /api/assets/:id/return` (admin/manager)
+- `GET /api/assets/:id/history` (auth)
 
-**2.Install dependencies**
+## Migrations
+- `server/migrations/001_init.sql`
+- `server/migrations/002_seed_users.sql`
 
-        npm install
-
-**3.Create .env file**
-
-        DB_HOST=localhost
-
-        DB_USER=root
-
-        DB_PASS=your_password
-
-        DB_NAME=invenzo_db
-
-        JWT_SECRET=your_super_secret_key
-
-**4.Run MySQL schema**
-
-        Import sql/schema.sql into your MySQL to create tables.
-
-**5.Start the server**
-
-        node server/app.js
-
-**6.Access the app**
-
-        Open public/login.html in your browser
-
-**📬 API Endpoints**
-
-        POST   /api/users/signup       - Create a user
-        POST   /api/users/login        - Login + JWT token
-        GET    /api/assets             - Get all assets (Auth)
-
-**🔒 Security**
-
-        •Passwords are hashed using bcrypt
-        •Routes are protected with JWT-based middleware
-        •.env is excluded using .gitignore
-
-**🙋‍♂️ Author**
-
-        Made with ❤️ by Surya Panduri
-        Building INVENZO to simplify asset tracking and learning full-stack magic! ✨
+## Notes
+- Legacy `sql/schema.sql` is deprecated; use `npm run migrate`.
+- Env loading supports both root `.env` and `server/.env`.
+- DB switching supports:
+  - `DB_TARGET=local` -> `DATABASE_URL_LOCAL`
+  - `DB_TARGET=remote` -> `DATABASE_URL_REMOTE`
+- Fallback priority:
+  1. `DATABASE_URL` (or selected `DATABASE_URL_LOCAL/REMOTE`)
+  2. `PG*` or `DB*` variables
+- For hosting, set `DB_TARGET=remote` and provide `DATABASE_URL_REMOTE`.

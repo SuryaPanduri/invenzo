@@ -1,34 +1,46 @@
 const express = require('express');
-const app = express();
 const path = require('path');
-require('dotenv').config();
+require('./config/loadEnv');
 
 const db = require('./db');
 const userRoutes = require('./routes/users');
 const assetRoutes = require('./routes/assets');
+const errorHandler = require('./middleware/errorHandler');
 
-// Middleware
+const app = express();
+
 app.use(express.json());
-
-// Serve frontend
 app.use(express.static(path.join(__dirname, '../public')));
 
-// API routes
 app.use('/api/users', userRoutes);
 app.use('/api/assets', assetRoutes);
 
-// Health check (recommended)
-app.get('/health', async (req, res) => {
+app.get('/health/live', (req, res) => {
+  res.json({ status: 'ok' });
+});
+
+app.get('/health/ready', async (req, res, next) => {
   try {
     await db.query('SELECT 1');
     res.json({ status: 'ok', db: 'connected' });
   } catch (err) {
-    res.status(500).json({ status: 'error', db: 'disconnected' });
+    next(err);
   }
 });
 
-// Start server
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`✅ Server listening at http://localhost:${PORT}`);
+app.get('/health', async (req, res, next) => {
+  try {
+    await db.query('SELECT 1');
+    res.json({ status: 'ok', db: 'connected' });
+  } catch (err) {
+    next(err);
+  }
 });
+
+app.use((req, res) => {
+  res.status(404).json({ message: 'Route not found', code: 'NOT_FOUND' });
+});
+
+app.use(errorHandler);
+
+module.exports = app;
