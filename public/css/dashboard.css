@@ -1,125 +1,346 @@
 :root {
-    --bg: #f8f9fa;
-    --text: #1e293b;
-    --card-bg: #ffffff;
-    --sidebar-bg: #1e293b;
-    --sidebar-text: white;
-    --sidebar-hover: #334155;
-    --highlight: #60a5fa;
-    --badge-available: #16a34a;
-    --badge-checkedout: #dc2626;
-    --badge-other: #e2e8f0;
-  }
-  
-  [data-theme="dark"] {
-    --bg: #0f172a;
-    --text: #e2e8f0;
-    --card-bg: #1e293b;
-    --sidebar-bg: #0f172a;
-    --sidebar-text: #cbd5e1;
-    --sidebar-hover: #1e293b;
-    --highlight: #3b82f6;
-    --badge-other: #334155;
-  }
-  
-  body {
-    font-family: 'Inter', sans-serif;
-    background-color: var(--bg);
-    color: var(--text);
-    margin: 0;
-    transition: background 0.3s ease, color 0.3s ease;
-  }
-  
-  /* Sidebar */
-  .sidebar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    height: 100vh;
-    width: 100px;
-    background-color: var(--sidebar-bg);
-    color: var(--sidebar-text);
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    padding: 2rem 1rem;
-    animation: fadeInSidebar 0.6s ease-in-out;
-    z-index: 1000;
-    overflow-y: auto;
-  }
-  
-  .sidebar h4 {
-    text-align: center;
-    margin-bottom: 2rem;
-    font-weight: bold;
-  }
-  
-  .nav-links {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-  
-  .sidebar a {
-    color: var(--sidebar-text);
-    padding: 0.75rem 1rem;
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    border-radius: 8px;
-    text-decoration: none;
-    position: relative;
-    transition: all 0.3s ease-in-out;
-    overflow: hidden;
-  }
-  
-  .sidebar a::before {
-    content: '';
-    position: absolute;
-    height: 100%;
-    width: 4px;
-    background: var(--highlight);
-    left: 0;
-    top: 0;
-    transform: scaleY(0);
-    transition: transform 0.3s ease-in-out;
-  }
-  
-  .sidebar a:hover::before,
-  .sidebar a.active::before {
-    transform: scaleY(1);
-  }
-  
-  .sidebar a:hover,
-  .sidebar a.active {
-    background-color: var(--sidebar-hover);
-    transform: translateX(4px);
-  }
-  
-  /* Animations */
-  @keyframes fadeInSidebar {
-    from { opacity: 0; transform: translateX(-20px); }
-    to { opacity: 1; transform: translateX(0); }
-  }
-  
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-  
-  /* Cards */
-  .stats-card {
-    background: var(--card-bg);
-    border-radius: 12px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.08);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-  }
-  
-  .stats-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 6px 12px rgba(0,0,0,0.12);
+  --dash-bg: #f4f7fb;
+  --dash-card: #ffffff;
+  --dash-border: #d8e0eb;
+  --dash-text: #1b3653;
+  --dash-muted: #5f7890;
+  --dash-sidebar: #102947;
+  --dash-sidebar-soft: #173d66;
+  --dash-highlight: #f0b03e;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: 'Manrope', sans-serif;
+  background: var(--dash-bg);
+  color: var(--dash-text);
+}
+
+.dashboard-shell {
+  display: grid;
+  grid-template-columns: 250px 1fr;
+  min-height: 100vh;
+}
+
+.sidebar {
+  background: linear-gradient(180deg, var(--dash-sidebar), var(--dash-sidebar-soft));
+  color: #fff;
+  padding: 1.4rem 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.brand-stack {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 1.2rem;
+}
+
+.brand-stack img {
+  width: 42px;
+  height: 42px;
+}
+
+.brand-stack h1 {
+  margin: 0;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.2rem;
+}
+
+.nav-links {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.nav-links a {
+  color: #dbe8f3;
+  text-decoration: none;
+  padding: 0.68rem 0.72rem;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  transition: all 0.25s ease;
+}
+
+.nav-links a:hover,
+.nav-links a.active {
+  background: rgba(255, 255, 255, 0.14);
+  color: #fff;
+}
+
+.logout-btn {
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.07);
+  color: #fff;
+  border-radius: 10px;
+  padding: 0.62rem 0.8rem;
+  text-align: left;
+}
+
+.content-area {
+  padding: 1.3rem;
+}
+
+.topbar {
+  background: var(--dash-card);
+  border: 1px solid var(--dash-border);
+  border-radius: 16px;
+  padding: 1rem 1.1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.eyebrow {
+  margin: 0;
+  color: var(--dash-muted);
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.topbar h2 {
+  font-family: 'Space Grotesk', sans-serif;
+  margin: 0.2rem 0 0;
+}
+
+.user-chip {
+  background: #eef3f8;
+  padding: 0.45rem 0.8rem;
+  border-radius: 999px;
+  font-weight: 600;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.9rem;
+  margin-bottom: 1rem;
+}
+
+.stats-card {
+  border-radius: 14px;
+  padding: 1rem;
+  color: #fff;
+}
+
+.stats-card p {
+  margin: 0;
+  opacity: 0.9;
+}
+
+.stats-card h3 {
+  margin: 0.4rem 0 0;
+  font-size: 1.9rem;
+  font-family: 'Space Grotesk', sans-serif;
+}
+
+.total-card {
+  background: linear-gradient(135deg, #205f9d, #3d81bc);
+}
+
+.available-card {
+  background: linear-gradient(135deg, #2b8a63, #4faf83);
+}
+
+.checkout-card {
+  background: linear-gradient(135deg, #ab5e2a, #d78443);
+}
+
+.analytics-grid {
+  display: grid;
+  grid-template-columns: minmax(300px, 0.68fr) minmax(420px, 1.32fr);
+  gap: 0.9rem;
+}
+
+.chart-card {
+  background: var(--dash-card);
+  border: 1px solid var(--dash-border);
+  border-radius: 14px;
+  padding: 0.9rem;
+  min-height: 320px;
+}
+
+.chart-card h4 {
+  margin-top: 0;
+  font-family: 'Space Grotesk', sans-serif;
+}
+
+.compact-chart-card {
+  min-height: 205px;
+  max-width: 560px;
+}
+
+.chart-card canvas {
+  width: 100% !important;
+  height: 210px !important;
+}
+
+.compact-chart-card canvas {
+  height: 145px !important;
+}
+
+#statusChart {
+  width: 62% !important;
+  max-width: 250px;
+  margin: 0.15rem auto 0;
+  display: block;
+}
+
+.role-strip {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.role-card {
+  background: #fff8e9;
+  border: 1px solid #f0dab2;
+  border-radius: 12px;
+  padding: 0.62rem 0.75rem;
+  color: #8d5a1b;
+  font-weight: 600;
+}
+
+@media (max-width: 1200px) {
+  .dashboard-shell {
+    grid-template-columns: 220px 1fr;
   }
 
-  
-  
-  
+  .content-area {
+    padding: 1rem;
+  }
+
+  .stats-card h3 {
+    font-size: 1.65rem;
+  }
+
+  .analytics-grid {
+    grid-template-columns: minmax(260px, 0.72fr) minmax(340px, 1.28fr);
+  }
+}
+
+@media (max-width: 991px) {
+  .dashboard-shell {
+    grid-template-columns: 1fr;
+  }
+
+  .sidebar {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 0.9rem;
+    gap: 0.8rem;
+  }
+
+  .sidebar > div:first-child {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.65rem;
+    flex: unset;
+  }
+
+  .brand-stack {
+    margin-bottom: 0;
+  }
+
+  .nav-links {
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(120px, 1fr);
+    overflow-x: auto;
+    padding-bottom: 0.2rem;
+  }
+
+  .stats-grid,
+  .analytics-grid,
+  .role-strip {
+    grid-template-columns: 1fr;
+  }
+
+  .chart-card,
+  .compact-chart-card {
+    min-height: auto;
+  }
+
+  .chart-card canvas {
+    height: 190px !important;
+  }
+
+  .compact-chart-card canvas {
+    height: 130px !important;
+  }
+
+  #statusChart {
+    width: 64% !important;
+    max-width: 220px;
+  }
+
+  .logout-btn {
+    width: 100%;
+    text-align: center;
+  }
+}
+
+@media (max-width: 768px) {
+  .topbar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.6rem;
+  }
+
+  .user-chip {
+    align-self: flex-end;
+  }
+
+  .stats-grid {
+    gap: 0.7rem;
+  }
+
+  .chart-card {
+    padding: 0.75rem;
+  }
+
+  .chart-card h4 {
+    font-size: 1.05rem;
+  }
+
+  .role-card {
+    font-size: 0.95rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .content-area {
+    padding: 0.8rem;
+  }
+
+  .topbar {
+    padding: 0.8rem 0.85rem;
+  }
+
+  .topbar h2 {
+    font-size: 1.75rem;
+  }
+
+  .stats-card {
+    padding: 0.85rem;
+  }
+
+  .stats-card h3 {
+    font-size: 1.5rem;
+  }
+
+  #statusChart {
+    width: 68% !important;
+    max-width: 200px;
+  }
+}

@@ -39,11 +39,12 @@ const hasDiscretePgConfig = Boolean(
     process.env.DB_NAME
 );
 
+const forceSslFromEnv = process.env.DATABASE_SSL === 'true' || process.env.PGSSL === 'true';
+
 const useSsl =
-  process.env.DATABASE_SSL === 'true' ||
-  process.env.PGSSL === 'true' ||
   dbTarget === 'remote' ||
-  (process.env.NODE_ENV === 'production' && hasDatabaseUrl);
+  (dbTarget !== 'local' && forceSslFromEnv) ||
+  (process.env.NODE_ENV === 'production' && hasDatabaseUrl && dbTarget !== 'local');
 
 const baseConfig = hasDatabaseUrl
   ? { connectionString: resolvedConnectionString }

@@ -1,30 +1,226 @@
-body {
-  font-family: 'Poppins', sans-serif;
-  background: linear-gradient(90deg, #5b86e5 0%, #36d1c4 100%);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
+:root {
+  --auth-bg-a: #0e2d50;
+  --auth-bg-b: #174a75;
+  --auth-bg-c: #1f7b97;
+  --auth-text: #102946;
+  --auth-muted: #607a93;
+  --auth-border: #d6e1ea;
+  --auth-highlight: #f4b63d;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body.auth-page {
   margin: 0;
+  min-height: 100vh;
+  font-family: 'Manrope', sans-serif;
+  background: linear-gradient(125deg, var(--auth-bg-a), var(--auth-bg-b) 45%, var(--auth-bg-c));
+  color: #fff;
 }
-.login-card {
+
+body:not(.auth-page) {
+  margin: 0;
+  min-height: 100vh;
+  font-family: 'Manrope', sans-serif;
+  background: linear-gradient(125deg, var(--auth-bg-a), var(--auth-bg-b) 45%, var(--auth-bg-c));
+}
+
+.auth-shell {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+}
+
+.auth-showcase {
+  padding: 3rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  animation: fadeUp 0.7s ease both;
+}
+
+.auth-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin-bottom: 1rem;
+}
+
+.auth-brand img {
+  width: 50px;
+  height: 50px;
+}
+
+.auth-brand h1 {
+  margin: 0;
+  font-size: 2rem;
+  font-family: 'Space Grotesk', sans-serif;
+}
+
+.auth-showcase p {
+  max-width: 420px;
+  color: rgba(255, 255, 255, 0.88);
+}
+
+.auth-showcase ul {
+  list-style: none;
+  padding: 0;
+  margin: 1rem 0 0;
+  display: grid;
+  gap: 0.5rem;
+}
+
+.auth-showcase li::before {
+  content: '•';
+  color: var(--auth-highlight);
+  margin-right: 0.5rem;
+}
+
+.auth-panel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.auth-card,
+.login-card,
+.signup-card {
+  width: min(460px, 100%);
   background: #fff;
-  padding: 30px;
+  border-radius: 22px;
+  padding: 2rem;
+  box-shadow: 0 25px 50px rgba(3, 15, 31, 0.22);
+  color: var(--auth-text);
+  animation: fadeUp 0.75s ease both;
+}
+
+body:not(.auth-page) .login-card,
+body:not(.auth-page) .signup-card {
+  margin: min(10vh, 72px) auto;
+}
+
+.auth-card h2 {
+  font-family: 'Space Grotesk', sans-serif;
+  margin-bottom: 0.2rem;
+}
+
+.muted {
+  color: var(--auth-muted);
+  margin-bottom: 1.2rem;
+}
+
+.form-control {
+  border: 1px solid var(--auth-border);
+  padding: 0.72rem 0.82rem;
   border-radius: 12px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
-  width: 100%;
-  max-width: 400px;
 }
-.login-card h3 {
-  color: #4c51bf;
+
+.form-control:focus {
+  box-shadow: 0 0 0 3px rgba(23, 74, 117, 0.12);
+  border-color: #175f9b;
 }
-.btn-primary {
-  background-color: #4c51bf;
-  border: none;
-}
-.btn-primary:hover {
-  background-color: #5a67d8;
-}
+
 .form-label {
   font-weight: 600;
+}
+
+.btn-accent {
+  background: linear-gradient(110deg, #f2a93b, #f7c85a);
+  border: none;
+  color: #14253f;
+  font-weight: 700;
+  border-radius: 12px;
+  padding: 0.72rem 0.9rem;
+}
+
+.btn-accent:hover {
+  filter: brightness(0.97);
+}
+
+.link-inline {
+  color: #1f5f98;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.link-inline:hover {
+  text-decoration: underline;
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 992px) {
+  .auth-shell {
+    grid-template-columns: 1fr;
+  }
+
+  .auth-showcase {
+    padding: 2rem 1.2rem 0.85rem;
+  }
+
+  .auth-panel {
+    padding-top: 0;
+    padding-left: 1.2rem;
+    padding-right: 1.2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .auth-showcase {
+    padding: 1.35rem 1rem 0.5rem;
+  }
+
+  .auth-showcase ul {
+    grid-template-columns: 1fr;
+    gap: 0.35rem;
+  }
+
+  .auth-showcase p {
+    margin-bottom: 0.55rem;
+  }
+
+  .auth-card,
+  .login-card,
+  .signup-card {
+    width: 100%;
+    max-width: 520px;
+  }
+}
+
+@media (max-width: 576px) {
+  .auth-showcase {
+    padding: 1rem 0.9rem 0.4rem;
+  }
+
+  .auth-showcase ul {
+    display: none;
+  }
+
+  .auth-panel {
+    padding: 0.8rem;
+  }
+
+  .auth-card,
+  .login-card,
+  .signup-card {
+    padding: 1.4rem;
+    border-radius: 16px;
+  }
+
+  .auth-brand h1 {
+    font-size: 1.55rem;
+  }
 }

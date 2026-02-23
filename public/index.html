@@ -3,86 +3,117 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Welcome to INVENZO</title>
+  <title>INVENZO | Asset Intelligence</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Manrope:wght@400;600&display=swap" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
   <link href="css/index.css" rel="stylesheet"/>
+  <link rel="icon" type="image/png" sizes="100x100" href="images/favicon.png" />
 </head>
 <body>
-  <div class="main-wrapper">
-    <header class="text-center py-5" style="background: linear-gradient(90deg, #5b86e5 0%, #36d1c4 100%); color: #fff;">
-      <div class="d-flex justify-content-center align-items-center mb-3">
-        <img src="images/favicon.png" alt="INVENZO Logo" style="width: 140px; height: 140px; margin-right: 20px;" />
-        <h1 class="fw-bold mb-0" style="font-size: 4rem;">INVENZO</h1>
-      </div>
-      <p class="lead mb-4">Smart Asset Management System to Track, Manage, and Optimize Your Inventory</p>
-      <div class="cta-buttons mb-2">
-        <a href="login.html" class="btn btn-light btn-lg me-2">Login</a>
-        <a href="signup.html" class="btn btn-outline-light btn-lg">Sign Up</a>
-      </div>
-    </header>
+  <div class="bg-orb bg-orb-a"></div>
+  <div class="bg-orb bg-orb-b"></div>
 
-    <section class="features py-5">
-      <h2 class="text-center fw-semibold mb-5">Why Choose INVENZO?</h2>
-      <div class="feature-grid row justify-content-center gx-4 gy-4">
-        <div class="feature-box col-md-3 col-sm-6 animate__animated animate__fadeInUp text-center bg-white rounded shadow-sm p-4 mx-2">
-          <div class="feature-icon mb-3" style="font-size:2.5rem; color:#5b86e5;">
-            <i class="fas fa-laptop-code"></i>
-          </div>
-          <h5 class="fw-bold mb-2">Easy to Use</h5>
-          <p class="mb-0">Modern UI and intuitive dashboard to manage assets efficiently.</p>
-        </div>
-        <div class="feature-box col-md-3 col-sm-6 animate__animated animate__fadeInUp text-center bg-white rounded shadow-sm p-4 mx-2" style="animation-delay: 0.1s;">
-          <div class="feature-icon mb-3" style="font-size:2.5rem; color:#36d1c4;">
-            <i class="fas fa-database"></i>
-          </div>
-          <h5 class="fw-bold mb-2">Secure Storage</h5>
-          <p class="mb-0">Your data is safe with our role-based authentication and JWT protection.</p>
-        </div>
-        <div class="feature-box col-md-3 col-sm-6 animate__animated animate__fadeInUp text-center bg-white rounded shadow-sm p-4 mx-2" style="animation-delay: 0.2s;">
-          <div class="feature-icon mb-3" style="font-size:2.5rem; color:#5b86e5;">
-            <i class="fas fa-chart-line"></i>
-          </div>
-          <h5 class="fw-bold mb-2">Analytics</h5>
-          <p class="mb-0">Visualize asset usage and inventory insights with dynamic charts.</p>
-        </div>
-        <div class="feature-box col-md-3 col-sm-6 animate__animated animate__fadeInUp text-center bg-white rounded shadow-sm p-4 mx-2" style="animation-delay: 0.3s;">
-          <div class="feature-icon mb-3" style="font-size:2.5rem; color:#36d1c4;">
-            <i class="fas fa-cloud-upload-alt"></i>
-          </div>
-          <h5 class="fw-bold mb-2">Cloud-Based</h5>
-          <p class="mb-0">Access anywhere, anytime—whether on desktop or mobile.</p>
-        </div>
-        <div class="feature-box col-md-3 col-sm-6 animate__animated animate__fadeInUp text-center bg-white rounded shadow-sm p-4 mx-2" style="animation-delay: 0.4s;">
-          <div class="feature-icon mb-3" style="font-size:2.5rem; color:#5b86e5;">
-            <i class="fas fa-bolt"></i>
-          </div>
-          <h5 class="fw-bold mb-2">Fast Performance</h5>
-          <p class="mb-0">Optimized queries and architecture for lightning-fast operations.</p>
-        </div>
-
-        <div class="feature-box col-md-3 col-sm-6 animate__animated animate__fadeInUp text-center bg-white rounded shadow-sm p-4 mx-2" style="animation-delay: 0.5s;">
-          <div class="feature-icon mb-3" style="font-size:2.5rem; color:#36d1c4;">
-            <i class="fas fa-headset"></i>
-          </div>
-          <h5 class="fw-bold mb-2">24/7 Support</h5>
-          <p class="mb-0">Reliable assistance whenever you need help or guidance.</p>
-        </div>
+  <header class="hero">
+    <nav class="hero-nav">
+      <div class="brand">
+        <img src="images/invenzo_logo.png" alt="INVENZO" />
+        <span>INVENZO</span>
       </div>
+      <div class="hero-actions">
+        <a href="login.html" class="btn btn-outline-light">Login</a>
+        <a href="signup.html" class="btn btn-warning">Create Account</a>
+      </div>
+    </nav>
+
+    <div class="hero-grid">
+      <section class="hero-copy">
+        <p class="eyebrow">Asset Operations Platform</p>
+        <h1>Track every device lifecycle with speed and control.</h1>
+        <p class="hero-subtitle">
+          Manage inventory, ownership, checkouts, and analytics from one focused workspace built for real operations teams.
+        </p>
+        <div class="hero-cta">
+          <a href="signup.html" class="btn btn-warning btn-lg">Start Free</a>
+          <a href="login.html" class="btn btn-outline-light btn-lg">Go to Dashboard</a>
+        </div>
+      </section>
+      <section class="hero-panel">
+        <h3>Live Snapshot</h3>
+        <div class="metric-list">
+          <div class="metric-item">
+            <span>Total Assets</span>
+            <strong>1,248</strong>
+          </div>
+          <div class="metric-item">
+            <span>Checked Out</span>
+            <strong>276</strong>
+          </div>
+          <div class="metric-item">
+            <span>Overdue</span>
+            <strong>14</strong>
+          </div>
+        </div>
+        <div class="panel-note">Built for admins, managers, and viewers with role-based access.</div>
+      </section>
+    </div>
+  </header>
+
+  <main class="feature-wrap">
+    <section class="feature-row">
+      <article class="feature-card reveal delay-1">
+        <i class="fas fa-qrcode"></i>
+        <h4>Instant Asset Lookup</h4>
+        <p>Fast search by name, serial, or tag to reduce lookup time on daily ops.</p>
+      </article>
+      <article class="feature-card reveal delay-2">
+        <i class="fas fa-right-left"></i>
+        <h4>Checkout + Return Flow</h4>
+        <p>Capture assignee, due date, and history with an auditable checkout lifecycle.</p>
+      </article>
+      <article class="feature-card reveal delay-3">
+        <i class="fas fa-chart-column"></i>
+        <h4>Operational Analytics</h4>
+        <p>Monitor availability, utilization, and overdue trends with actionable charts.</p>
+      </article>
     </section>
 
-    <div class="cta-section py-5" style="background: linear-gradient(90deg, #36d1c4 0%, #5b86e5 100%); color: #fff;">
-      <div class="container text-center">
-        <h2 class="fw-semibold mb-4">Start Managing Your Assets with Ease</h2>
-        <a href="signup.html" class="btn btn-light btn-lg fw-semibold">Get Started</a>
-      </div>
-    </div>
+    <section class="detail-strip">
+      <article class="detail-card">
+        <h5>How It Works</h5>
+        <p>Register assets, assign ownership, and track every status change in a clean operational timeline.</p>
+      </article>
+      <article class="detail-card">
+        <h5>Team Workflow</h5>
+        <p>Admins control policy, managers handle checkouts, viewers monitor inventory health in real time.</p>
+      </article>
+      <article class="detail-card">
+        <h5>Audit Ready</h5>
+        <p>Checkout and return actions are stored with actor and timestamps for accountability and reporting.</p>
+      </article>
+    </section>
 
-    <footer class="text-center py-4" style="background: #222; color: #bbb;">
-      &copy; 2025 INVENZO. All rights reserved.
-    </footer>
-  </div>
+    <section class="kpi-band">
+      <div>
+        <strong>99.9%</strong>
+        <span>Inventory visibility</span>
+      </div>
+      <div>
+        <strong>3x</strong>
+        <span>Faster checkouts</span>
+      </div>
+      <div>
+        <strong>0 guesswork</strong>
+        <span>Role-based controls</span>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <span>INVENZO</span>
+    <small>Asset management for teams that move fast.</small>
+  </footer>
 </body>
 </html>
